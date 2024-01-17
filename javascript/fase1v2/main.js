@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
   let tasksData = localStorage.getItem("tasksData")
     ? JSON.parse(localStorage.getItem("tasksData"))
     : [];
+    
 
 
   // Elementos del DOM
@@ -61,11 +62,14 @@ document.addEventListener('DOMContentLoaded', function() {
       document.querySelector(".acceso").classList.add("oculto");
       // Muestra el nombre del usuario
       nombreUsuarioElement.textContent = usuario;
+      let usuarioActual=nombreUsuarioElement.textContent;
       // Actualiza el contador de tareas completadas y pendientes
       actualizarContadoresTareas();
-      // pinta las tareas
-      pintarTareas(tasksData);
-      console.log(tareasPendientesUsuarioActual);
+      let tareasDelUsuarioPendientes = tasksData.filter(tarea => tarea.propietario === usuarioActual&&!tarea.completado);
+      // pinta las tareas del usuario actual pendientes
+      pintarTareas(tareasDelUsuarioPendientes);
+      // Filtra las tareas del usuario actual y las almacena en una variable
+      
     } else {
       alert("Usuario o contraseña incorrectos");
     }
@@ -107,7 +111,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Actualiza los contadores de tareas
     actualizarContadoresTareas();
     // pinta las tareas
-    pintarTareas(tasksData);
+    mostrarTareasCompletadasOPendientes();
   }
 
   // funcion pintar tareas
@@ -123,6 +127,7 @@ document.addEventListener('DOMContentLoaded', function() {
       listaTareasElement.appendChild(tareaDiv);
     });
   }
+  // funcion pintar tareas pendientes
 
   // Función para actualizar los contadores de tareas completadas y pendientes
   function actualizarContadoresTareas() {
@@ -141,8 +146,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Función para mostrar tareas completadas
 
-  let tareasPendientesUsuarioActual
-  function mostrarTareasCompletadas() {
+
+  function mostrarTareasCompletadasOPendientes() {
     const usuarioActual = nombreUsuarioElement.textContent;
 
 
@@ -150,9 +155,9 @@ document.addEventListener('DOMContentLoaded', function() {
   let tareasCompletadasUsuarioActual = tasksData.filter(
     (t) => t.propietario === usuarioActual && t.completado
     );
-  tareasPendientesUsuarioActual = tasksData.filter(
-    (t) => t.propietario === usuarioActual && !t.completado
-  );
+    let tareasPendientesUsuarioActual = tasksData.filter(
+      (t) => t.propietario === usuarioActual && !t.completado
+    );
 
 
     // Lógica para mostrar/ocultar tareas completadas según el estado del checkbox
@@ -169,24 +174,22 @@ function okOrRemoveTarea(event) {
   const target = event.target;
   const targetText = target.textContent;
   const taskId =
-    targetText === "Eliminar"
-      ? target.previousElementSibling.previousElementSibling.getAttribute(
-          "data-id"
-        )
-      : target.previousElementSibling.getAttribute("data-id");
+    targetText === "Eliminar" ? target.previousElementSibling.previousElementSibling.getAttribute("data-id") : target.previousElementSibling.getAttribute("data-id");
 
   const task = tasksData.find((t) => t.id === taskId);
   const taskIndex = tasksData.findIndex((t) => t.id === taskId);
 
   if (targetText === "Eliminar") {
     tasksData.splice(taskIndex, 1);
+      pintarTareas(tasksData);
   } else if (targetText === "Completar") {
     task.completado = true;
+      pintarTareas(tasksData);
   }
 
   localStorage.setItem("tasksData", JSON.stringify(tasksData));
   actualizarContadoresTareas();
-  pintarTareas(tasksData);
+  mostrarTareasCompletadasOPendientes();
 }
 
 
@@ -241,6 +244,6 @@ function okOrRemoveTarea(event) {
   // Checkbox para mostrar tareas completadas
   mostrarTareasCompletadasCheckbox.addEventListener(
     "change",
-    mostrarTareasCompletadas
+    mostrarTareasCompletadasOPendientes
   );
 });
