@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="main.js" defer></script>
+
+</head>
+<body>
+    <div class="acceso">
+        <div class="login">
+            <h1>Login</h1>
+            <p>Usuario</p>
+            <input type="text" id="usuarioInputLogin">
+            <p>Contraseña</p>
+            <input type="password" id="claveInputLogin">
+            <button class="botones loginButton">Entrar</button>
+            <button class="botones pageRegisterButton">Crear cuenta</button>
+
+        </div>
+
+        <div class="registro oculto">
+            <h1>Registro</h1>
+            <p>Nombre</p>
+            <input type="text" id="nombreInput">
+            <p>Usuario</p>
+            <input type="text" id="usuarioInput">
+            <p>Contraseña</p>
+            <input type="password" id="claveInput">
+            <p>Confirmar contraseña</p>
+            <input type="password" id="confirmarClaveInput">
+            <button class="botones registerButton" >Registrar</button>
+            <button class="botones pageLoginButton">Ya tengo una cuenta</button>
+        </div>
+
+        
+    </div>
+    <div class="main oculto">
+        <div class="cabecera">
+            <div class="infoCabecera">
+                <p>Bienvenido <strong id="nombreUsuario"></strong></p>
+                <p>Completadas <span id="spanCompletadas">40</span></p>
+                <p>Pendientes <span id="spanPendientes">5</span></p>
+            </div>
+            <button class="botones cerrarSesionButton">Cerrar sesión</button>
+        </div>
+        <div class="tareas">
+            <input type="text" class="tareaNueva">
+            <button class="botones nuevaTareaButton">Nueva Tarea</button>
+            <p>Mostrar tareas completadas <input type="checkbox" id="mostrarTareasCompletadas"></p>
+            <div id="listaTareas"></div>
+        </div>
+    </div>
+</body>
+</html>

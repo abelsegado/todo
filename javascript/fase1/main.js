@@ -12,51 +12,51 @@ let capaLogin = document.querySelector(".login"),
   capaPrincipal = document.querySelector(".main");
 
 // VARIABLES
-let usuarios;
+let usuarios=[];
 let usuarioLogueado="";
 let nombreLogueado="";
-let sesionIniciada=false;
 let usuariosRegistrado = {
   nombre: "",
   usuario: "",
   clave: "",
 };
+let tareas = [];
 // FUNCIONES PRINCIPALES
 function main() {
-  sesionIniciada = true;
   capaRegistro.classList.add("oculto");
   capaLogin.classList.add("oculto");
   capaAcceso.classList.add("oculto");
   capaPrincipal.classList.remove("oculto");
-  actualizarTareas();
-  console.log('tareas actualizadas');
+  // actualizarTareas();
+  console.log('funcion main');
 }
 function acceso() {
-  sesionIniciada = false;
-  usuarioLogueado="";
-  capaRegistro.classList.add("oculto");
-  capaLogin.classList.remove("oculto");
-  capaPrincipal.classList.add("oculto");
-}
-function cerrarSesion() {
-  sesionIniciada=false;
-  usuarioLogueado="";
   capaAcceso.classList.remove("oculto");
   capaPrincipal.classList.add("oculto");
+  console.log("funcion acceso");
+}
+function cerrarSesion() {
+  localStorage.setItem("sesion", false)
+  usuarioLogueado="";
+  capaAcceso.classList.remove("oculto");
+  capaLogin.classList.remove("oculto");
+  capaPrincipal.classList.add("oculto");
+  console.log("funcion cerrar");
 }
 
-  if (localStorage.getItem("usuarios")) {
-    usuarios = JSON.parse(localStorage.getItem("usuarios"));
-    console.log('hay usuarios registrados')
-  }else{
-    usuarios = []
-    console.log('no hay registros de usuarios');
-  }
-  if (sesionIniciada) {
-    main()
-  }else{
-    acceso()
-  }
+if (!localStorage.getItem("sesion") == true) {
+  console.log("sesion true se supone");
+  console.log(localStorage.getItem("sesion"));
+  main();
+} else if (!localStorage.getItem("sesion") == false) {
+  console.log("sesision false se supone");
+  console.log(localStorage.getItem("sesion"));
+  acceso();
+}
+
+
+  
+
   document.querySelector(".cerrarSesionButton").addEventListener("click", function () {
     cerrarSesion()
   });
@@ -118,9 +118,12 @@ document.querySelector(".loginButton").addEventListener("click", function () {
   usuarioLogueado = document.getElementById("usuarioInputLogin").value.trim();
   let clave = document.getElementById("claveInputLogin").value.trim();
 
-
+  if (usuarioLogueado === "" || clave === "") {
+      alert("Los campos son obligatorios");
+      return
+    }
   if (usuarios.find((usu) => usu.usuario === usuarioLogueado && usu.clave == clave)) {
-    sesionIniciada = true;
+    localStorage.setItem("sesion",true);
 
     usuarios.forEach((usu) => {
       if (usu.usuario == usuarioLogueado) {
@@ -129,9 +132,10 @@ document.querySelector(".loginButton").addEventListener("click", function () {
       }
     });
     // Se muestra página principal
-      document.querySelector(".acceso").classList.toggle("oculto");
-      document.querySelector(".main").classList.toggle("oculto");
-    
+    // document.querySelector(".acceso").classList.toggle("oculto");
+    // document.querySelector(".main").classList.toggle("oculto");
+
+main()    
 
   } else {
     alert("Usuario no encontrado. Por favor, verifica tus credenciales.");
@@ -174,12 +178,12 @@ document.querySelector(".loginButton").addEventListener("click", function () {
   
 
   function agregarNuevaTarea() {
-
     let nuevaTareaNombre = tareaNuevaInput.value.trim();
     if (nuevaTareaNombre !== "") {
-
+      
       // let tarea = obtenerTareas();
       let tareas = JSON.parse(localStorage.getItem("tareas")) || [];
+
       nuevaTarea = {
         nombre: nuevaTareaNombre,
         completada: false,  
@@ -200,30 +204,32 @@ document.querySelector(".loginButton").addEventListener("click", function () {
   }
 
 
-  // function completarTarea(index) {
-  //   tareas[index].completada = !tareas[index].completada;
-  //   actualizarTareas(tareas);
-  //   actualizarTareas();
-  // }
+  function completarTarea(index) {
+    console.log(index);
+    tareas[index].completada = !tareas[index].completada;
+    actualizarTareas(tareas);
+    actualizarTareas();
+  }
 
-  // function eliminarTarea(index) {
-  //   tareas.splice(index, 1);
-  //   actualizarTareas(tareas);
-  //   actualizarTareas();
-  // }
+  function eliminarTarea(index) {
+    tareas.splice(index, 1);
+    actualizarTareas(tareas);
+    actualizarTareas();
+  }
 
 
 
-  // tareasContainer.addEventListener("click", function (event) {
-  //   let target = event.target;
-  //   if (target.classList.contains("completar")) {
-  //     let tareaDiv = target.closest(".tarea");
-  //     completarTarea(parseInt(tareaDiv.dataset.id));
-  //   } else if (target.classList.contains("eliminar")) {
-  //     let tareaDiv = target.closest(".tarea");
-  //     eliminarTarea(parseInt(tareaDiv.dataset.id));
-  //   }
-  // });
+  tareasContainer.addEventListener("click", function (event) {
+    let target = event.target;
+    console.log(target)
+    if (target.classList.contains("completar")) {
+      let tareaDiv = target.closest(".tarea");
+      completarTarea(parseInt(tareaDiv.dataset.id));
+    } else if (target.classList.contains("eliminar")) {
+      let tareaDiv = target.closest(".tarea");
+      eliminarTarea(parseInt(tareaDiv.dataset.id));
+    }
+  });
 
   actualizarTareas();
 
