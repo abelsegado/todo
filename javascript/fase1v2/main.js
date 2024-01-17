@@ -65,6 +65,7 @@ document.addEventListener('DOMContentLoaded', function() {
       actualizarContadoresTareas();
       // pinta las tareas
       pintarTareas(tasksData);
+      console.log(tareasPendientesUsuarioActual);
     } else {
       alert("Usuario o contraseña incorrectos");
     }
@@ -125,75 +126,68 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Función para actualizar los contadores de tareas completadas y pendientes
   function actualizarContadoresTareas() {
-    const usuarioActual = nombreUsuarioElement.textContent;
+    let usuarioActual = nombreUsuarioElement.textContent;
 
-    const tareasPendientes = tasksData.filter(
+    let tareasPendientes = tasksData.filter(
       (t) => t.propietario === usuarioActual && !t.completado
     );
-    spanCompletadasElement.textContent = tasksData.length-tareasPendientes.length -1;
+    let tareasCompletadas = tasksData.filter(
+      (t) => t.propietario === usuarioActual && t.completado
+    );
+    spanCompletadasElement.textContent = tareasCompletadas.length;
     spanPendientesElement.textContent = tareasPendientes.length;
   }
 
+
   // Función para mostrar tareas completadas
+
+  let tareasPendientesUsuarioActual
   function mostrarTareasCompletadas() {
     const usuarioActual = nombreUsuarioElement.textContent;
 
 
-let tareasCompletadasUsuarioActual = tasksData.forEach(t => {
-  if (t.propietario === usuarioActual && t.completado === true) {
-    console.log(t);
-  }
-});
+
+  let tareasCompletadasUsuarioActual = tasksData.filter(
+    (t) => t.propietario === usuarioActual && t.completado
+    );
+  tareasPendientesUsuarioActual = tasksData.filter(
+    (t) => t.propietario === usuarioActual && !t.completado
+  );
+
+
     // Lógica para mostrar/ocultar tareas completadas según el estado del checkbox
     if (mostrarTareasCompletadasCheckbox.checked) {
       // Muestra las tareas completadas
-      console.log("Tareas Completadas:", tareasCompletadasUsuarioActual);
+      pintarTareas(tareasCompletadasUsuarioActual);
     } else {
       // Oculta las tareas completadas
-      console.log("Mostrar Tareas Pendientes");
+      pintarTareas(tareasPendientesUsuarioActual);
     }
   }
 
-  // Función para completar una tarea
-  function okOrRemoveTarea(puntero) {
-    
-    let target = puntero.target;
+function okOrRemoveTarea(event) {
+  const target = event.target;
+  const targetText = target.textContent;
+  const taskId =
+    targetText === "Eliminar"
+      ? target.previousElementSibling.previousElementSibling.getAttribute(
+          "data-id"
+        )
+      : target.previousElementSibling.getAttribute("data-id");
 
-    let targetTarea = puntero.target.textContent;
+  const task = tasksData.find((t) => t.id === taskId);
+  const taskIndex = tasksData.findIndex((t) => t.id === taskId);
 
-    let punteroID
-    if (targetTarea == "Eliminar") {
-      punteroID = target.previousElementSibling.previousElementSibling.getAttribute("data-id");
-    } else if (targetTarea == "Completar") {
-      punteroID = target.previousElementSibling.getAttribute("data-id");
-    }
-
-      let tarea = tasksData.find((t) => t.id === punteroID);
-      let idTarea = tarea.id;
-      console.log(punteroID,idTarea);
-      let posicionTarea = tasksData.findIndex((t) => t.id === punteroID);
-
-
-      if (targetTarea=="Eliminar") {
-        console.log(tarea,posicionTarea);
-        tasksData.splice(posicionTarea,1)
-      }else if(targetTarea=="Completar"){
-       console.log(tarea, posicionTarea);
-        // Marca la tarea como completada
-        tarea.completado = true;
-      }
-
-
-      // Almacena los datos actualizados en el localStorage
-      localStorage.setItem("tasksData", JSON.stringify(tasksData));
-
-      // Actualiza los contadores de tareas
-      actualizarContadoresTareas();
-      // pinta las tareas
-      pintarTareas(tasksData);
-
-    
+  if (targetText === "Eliminar") {
+    tasksData.splice(taskIndex, 1);
+  } else if (targetText === "Completar") {
+    task.completado = true;
   }
+
+  localStorage.setItem("tasksData", JSON.stringify(tasksData));
+  actualizarContadoresTareas();
+  pintarTareas(tasksData);
+}
 
 
 
