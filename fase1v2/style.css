@@ -11,7 +11,7 @@
 }
 
 .cabecera{
-  height: 50px;
+  height: 100px;
   background: #ccc;
   display: flex;
   align-items: center;
@@ -23,6 +23,11 @@
   width: 50%;
   display: flex;
   justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+.infoCabecera p{
+  padding: 5px 10px;
 }
 .acceso {
   width: 400px;
@@ -57,6 +62,10 @@
   display: none!important;
 }
 
+.tareas{
+  padding: 20px;
+}
+
 .tarea p{
   padding: 5px 10px;
   color: white;
@@ -69,3 +78,4 @@
     border: 2px solid;
 
 }
+

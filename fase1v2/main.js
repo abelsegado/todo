@@ -8,8 +8,10 @@ document.addEventListener('DOMContentLoaded', function() {
   let tasksData = localStorage.getItem("tasksData")
     ? JSON.parse(localStorage.getItem("tasksData"))
     : [];
-    
-
+  // Array de usuario logueado (almacenados en el locahost)
+  let usuarioSesion = localStorage.getItem("usuarioLogueado");
+  
+console.log(usuarioSesion);
 
   // Elementos del DOM
   const loginButton = document.querySelector(".loginButton");
@@ -38,6 +40,17 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelector(".registro").classList.remove("oculto");
     document.querySelector(".login").classList.add("oculto");
   }
+  let sesion
+// Comprobar sesion iniciada
+    if (usuarioSesion) {
+      sesion=true
+      let userSesion = JSON.parse(usuarioSesion);
+      //inicia la sesion automaticamente del usuario logueado si refresca la pagina
+      iniciarSesion(userSesion[0].usuario, userSesion[0].clave);
+    }else{
+      sesion=false
+    }
+
 
   // Función para cerrar sesión
   function cerrarSesion() {
@@ -46,6 +59,8 @@ document.addEventListener('DOMContentLoaded', function() {
     tareaNuevaInput.value = "";
     listaTareasElement.innerHTML = "";
     mostrarTareasCompletadasCheckbox.checked = false;
+    //eliminar variable usuarioLogueado del locastorage
+    localStorage.removeItem("usuarioLogueado")
     // Oculta el área principal y muestra el formulario de acceso
     document.querySelector(".main").classList.add("oculto");
     document.querySelector(".acceso").classList.remove("oculto");
@@ -53,23 +68,34 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Función para iniciar sesión
   function iniciarSesion(usuario, clave) {
+    
     const user = usersData.find(
       (u) => u.usuario === usuario && u.clave === clave
     );
+
     if (user) {
       // Muestra el área principal
       document.querySelector(".main").classList.remove("oculto");
       document.querySelector(".acceso").classList.add("oculto");
+
+      //crea el usuarioLogueado si no lo estaba
+      if (!sesion) {
+        console.log(1);
+        localStorage.setItem("usuarioLogueado", JSON.stringify([user]));
+      }
+
       // Muestra el nombre del usuario
       nombreUsuarioElement.textContent = usuario;
-      let usuarioActual=nombreUsuarioElement.textContent;
+      let usuarioActual = nombreUsuarioElement.textContent;
       // Actualiza el contador de tareas completadas y pendientes
       actualizarContadoresTareas();
-      let tareasDelUsuarioPendientes = tasksData.filter(tarea => tarea.propietario === usuarioActual&&!tarea.completado);
+
+      // Filtra las tareas del usuario actual y las almacena en una variable
+      let tareasDelUsuarioPendientes = tasksData.filter(
+        (tarea) => tarea.propietario === usuarioActual && !tarea.completado
+      );
       // pinta las tareas del usuario actual pendientes
       pintarTareas(tareasDelUsuarioPendientes);
-      // Filtra las tareas del usuario actual y las almacena en una variable
-      
     } else {
       alert("Usuario o contraseña incorrectos");
     }
@@ -198,8 +224,7 @@ function okOrRemoveTarea(event) {
 
   // Botón de login
   loginButton.addEventListener("click", function () {
-    const usuarioInputLogin =
-      document.getElementById("usuarioInputLogin").value;
+    const usuarioInputLogin = document.getElementById("usuarioInputLogin").value;
     const claveInputLogin = document.getElementById("claveInputLogin").value;
     iniciarSesion(usuarioInputLogin, claveInputLogin);
   });
