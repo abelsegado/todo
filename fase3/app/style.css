@@ -1,0 +1,77 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: sans-serif;
+}
+
+
+.cabecera{
+  height: 100px;
+  background: #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0px 30px;
+}
+
+.infoCabecera{
+  width: 50%;
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+.infoCabecera p{
+  padding: 5px 10px;
+}
+.acceso {
+  width: 400px;
+  margin: 0 auto;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+}
+
+.registro {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  flex-direction: column;
+  width: 100%;
+  min-height: 30%;
+  background-color: antiquewhite;
+}
+.login{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  flex-direction: column;
+  width: 100%;
+  min-height: 30%;
+  background-color: lightgreen;
+}
+
+.oculto{
+  display: none!important;
+}
+
+.tareas{
+  padding: 20px;
+}
+
+.tarea p{
+  padding: 5px 10px;
+  color: white;
+  font-weight: 700;
+  font-size: 1.5em;
+}
+
+#listaTareas>div{
+    margin: 5px;
+    border: 2px solid;
+
+}
+
