@@ -102,28 +102,24 @@ console.log(usuarioSesion);
   }
 
   // Función para registrar un nuevo usuario
-  function registrarUsuario() {
-
-    fetch('consultas.php', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    })
-    .then(response => response.json())
-    .then(data => {
-      if (data.success) {
+  function registrarUsuario(nombre, usuario, clave, confirmarClave) {
+    // Verifica que las contraseñas coincidan
+    if (clave === confirmarClave) {
+      // Verifica que el usuario no exista
+      if (!usersData.some((u) => u.usuario === usuario)) {
+        // Agrega el nuevo usuario al array
+        usersData.push({ nombre, usuario, clave });
+        // Almacena los datos en el localStorage
+        localStorage.setItem("usersData", JSON.stringify(usersData));
+        // Muestra el formulario de acceso
         showLoginForm();
       } else {
-        alert(data.message);
+        alert("El usuario ya existe");
       }
-    })
-    .catch((error) => {
-      console.error('Error:', error);
-    });
-
-}
+    } else {
+      alert("Las contraseñas no coinciden");
+    }
+  }
 
   // Función para agregar una nueva tarea
   function agregarTarea(nombreTarea, id) {
@@ -234,7 +230,20 @@ function okOrRemoveTarea(event) {
   });
 
   // Botón de registro
-  registerButton.addEventListener("click", registrarUsuario);
+  registerButton.addEventListener("click", function () {
+    const nombreInput = document.getElementById("nombreInput").value;
+    const usuarioInput = document.getElementById("usuarioInput").value;
+    const claveInput = document.getElementById("claveInput").value;
+    const confirmarClaveInput = document.getElementById(
+      "confirmarClaveInput"
+    ).value;
+    registrarUsuario(
+      nombreInput,
+      usuarioInput,
+      claveInput,
+      confirmarClaveInput
+    );
+  });
 
   // Botón para cambiar a la página de registro
   pageRegisterButton.addEventListener("click", showRegisterForm);

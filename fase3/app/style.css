@@ -5,6 +5,10 @@
   font-family: sans-serif;
 }
 
+.botones{
+  margin: 5px 10px;
+  padding: 5px 10px;
+}
 
 .cabecera{
   height: 100px;
@@ -40,17 +44,17 @@
   margin: 0 auto;
   flex-direction: column;
   width: 100%;
-  min-height: 30%;
+  height: 30%;
   background-color: antiquewhite;
 }
-.login{
+.login {
   display: flex;
   justify-content: center;
   align-items: center;
   margin: 0 auto;
   flex-direction: column;
   width: 100%;
-  min-height: 30%;
+  height: 30%;
   background-color: lightgreen;
 }
 

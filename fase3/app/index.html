@@ -1,5 +1,3 @@
-<?php include 'conexion.php' ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,35 +6,34 @@
     <title>Document</title>
     <link rel="stylesheet" href="style.css">
     <script src="main.js" defer></script>
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
 </head>
 <body>
     <div class="acceso">
-        <form action="" class="login">
+        <div class="login">
             <h1>Login</h1>
             <p>Usuario</p>
-            <input type="text" name="usuarioLoginInput" id="usuarioInputLogin">
+            <input type="text" id="usuarioInputLogin">
             <p>Contraseña</p>
-            <input type="password" name="claveLoginInput" id="claveInputLogin">
-            <button type="submit" class="botones loginButton">Entrar</button>
-            <button type="button" class="btn btn-primary pageRegisterButton">Crear cuenta</button>
-        </form>
+            <input type="password" id="claveInputLogin">
+            <button class="botones loginButton">Entrar</button>
+            <button class="botones pageRegisterButton">Crear cuenta</button>
 
-        <form action="" class="registro oculto">
+        </div>
+
+        <div class="registro oculto">
             <h1>Registro</h1>
             <p>Nombre</p>
-            <input type="text" name="nombreRegisterInput" id="nombreInput">
+            <input type="text" id="nombreInput">
             <p>Usuario</p>
-            <input type="text" name="usuarioRegisterInput" id="usuarioInput">
+            <input type="text" id="usuarioInput">
             <p>Contraseña</p>
-            <input type="password" name="claveRegisterInput" id="claveInput">
+            <input type="password" id="claveInput">
             <p>Confirmar contraseña</p>
-            <input type="password" name="confirmarClaveRegisterInput" id="confirmarClaveInput">
-            <button type="submit" class="botones registerButton" >Registrar</button>
+            <input type="password" id="confirmarClaveInput">
+            <button class="botones registerButton" >Registrar</button>
             <button class="botones pageLoginButton">Ya tengo una cuenta</button>
-        </form>
+        </div>
 
         
     </div>
@@ -50,14 +47,11 @@
             <button class="botones cerrarSesionButton">Cerrar sesión</button>
         </div>
         <div class="tareas">
-            <form action="" method="post">
-                <input type="text" name="nuevaTareaInput" class="tareaNueva">
-                <button type="submit" class="botones nuevaTareaButton">Nueva Tarea</button>
-            </form>
+            <input type="text" class="tareaNueva">
+            <button class="botones nuevaTareaButton">Nueva Tarea</button>
             <p>Mostrar tareas completadas <input type="checkbox" id="mostrarTareasCompletadas"></p>
             <div id="listaTareas"></div>
         </div>
     </div>
-
 </body>
 </html>
