@@ -1,0 +1,22 @@
+<div class="acceso">
+        <form class="registro" #logupForm="ngForm">
+            <h1>Registro</h1>
+            <p>Nombre</p>
+            <input [(ngModel)]="logupForm.value.nombre" name="nombre" required type="text">
+            <p>Usuario</p>
+            <input [(ngModel)]="logupForm.value.usuario" name="usuario" required type="text">
+            <p>Contraseña</p>
+            <input minlength="1" [(ngModel)]="logupForm.value.clave" name="clave" required type="password">
+            <p>Confirmar contraseña</p>
+            <input [(ngModel)]="logupForm.value.confirmarClave" name="confirmarClave" required type="password">
+
+            @if (mensajeError) {
+                <p class="error">{{mensajeError}}</p>
+            }@else {
+                <p class="error"></p>
+            }
+
+            <button (click)="registrar(logupForm)" [disabled]="!logupForm.valid || !logupForm.value.clave.trim() != !logupForm.value.confirmarClave.trim()" class="botones registerButton">Registrar</button>
+            <button (click)="cargarLogin()" class="botones pageLoginButton">Ya tengo una cuenta</button>
+        </form>
+</div>

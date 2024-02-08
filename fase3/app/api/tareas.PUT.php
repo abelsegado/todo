@@ -10,7 +10,7 @@
 
     //comprobamos si recibimos id_usuario y nombre de tarea
 
-    if (!isset($_GET['id_tarea'])) {
+    if (!isset($_GET['id'])) {
         $respuesta['error'] = "Faltan datos amigo";
         echo json_encode($respuesta);
         exit;
@@ -24,7 +24,7 @@
         
     }
 
-    $idTarea = $_GET['id_tarea'];
+    $idTarea = $_GET['id'];
     $completada = $data['completada'];
 
     $sql = "UPDATE tareas

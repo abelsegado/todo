@@ -1,0 +1,24 @@
+/* You can add global styles to this file, and also import other style files */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.botones{
+  margin: 5px 10px;
+  padding: 5px 10px;
+}
+
+.acceso {
+  min-width: 400px;
+  margin: 0 auto;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+}
+
+button:disabled{
+  cursor: not-allowed;
+}

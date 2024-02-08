@@ -10,8 +10,9 @@
 
     //comprobamos si recibimos los datos
 
-    if (!isset($data['nombre']) || !isset($data['usuario']) || !isset($data['contraseña'])) {
-        $respuesta['error'] = "Faltan datos";
+    if (!isset($data['nombre']) || !isset($data['usuario']) || !isset($data['clave'])) {
+
+        $respuesta['error'] = "Faltan datosss";
         echo json_encode($respuesta);
         exit;
         
@@ -19,7 +20,7 @@
 
     $usuario = $data['usuario'];
     $nombreUsuario= $data['nombre'];
-    $claveUsuario= $data['contraseña'];
+    $claveUsuario= $data['clave'];
 
     $sql = "INSERT INTO usuarios (usuario, nombre, contraseña)
     VALUES (:usuario, :nombre, :clave)";

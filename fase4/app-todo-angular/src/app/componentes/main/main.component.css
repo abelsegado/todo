@@ -1,0 +1,57 @@
+
+.tareas{
+  padding: 20px;
+}
+
+.tarea p{
+  padding: 5px 10px;
+  color: black;
+  font-weight: 700;
+  font-size: 1.5em;
+}
+
+#listaTareas>div{
+  margin: 5px;
+  border: 2px solid;
+  min-height: 120px;
+
+}
+
+.infoCabecera{
+  display: block;
+}
+
+.infoCabecera p{
+  padding: 5px 10px;
+}
+
+.botones{
+  margin: 5px 10px;
+  padding: 5px 10px;
+}
+
+.cabecera{
+  min-height: 100px;
+  background: #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 30px;
+  flex-wrap: wrap;
+}
+
+p.completada{
+  text-decoration: line-through;
+}
+
+.tareaNueva {
+  padding: 10px;
+  font-size: 1em;
+}
+
+.tareaModifica{
+  padding: 10px;
+  margin: 10px;
+  font-size: 1em;
+}
+

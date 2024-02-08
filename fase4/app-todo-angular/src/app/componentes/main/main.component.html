@@ -1,0 +1,51 @@
+<div class="main">
+    <div class="cabecera">
+        <div class="infoCabecera">
+            <p>Bienvenido <strong id="nombreUsuario">{{nombreUsuario}}</strong></p>
+            <p>Completadas <span id="spanCompletadas">{{totalCompletadas()}}</span></p>
+            <p>Pendientes <span id="spanPendientes">{{totalPendientes()}}</span></p>
+        </div>
+        <button (click)="cerrarSesion()" class="botones cerrarSesionButton">Cerrar sesión</button>
+    </div>
+    <div class="tareas">
+        <div>
+            
+        <input [(ngModel)]="nuevaTarea" type="text" class="tareaNueva" (keydown.enter)="agregarTarea()">
+        <button [disabled]="!nuevaTarea.trim()" (click)="agregarTarea()" class="botones nuevaTareaButton">Nueva Tarea</button>
+        </div>
+        <label style="margin-right: 5px;" for="mostrarTareasCompletadas">Mostrar tambien tareas completadas</label>
+        <input [(ngModel)]="checkCompletadas" type="checkbox" id="mostrarTareasCompletadas">
+        <div id="listaTareas">
+            @if (!modificaTarea[0].editada) {
+                @for (item of listaTareas; track $index) {
+                    @if (!item.completada || checkCompletadas ) {
+                        <div class="tarea">
+                            <p [class]="{completada: item.completada}">{{item.nombre}}</p>
+                            <p>{{item.completada | sino | uppercase}}</p>
+                            @if (!item.completada) {
+                            <button (click)="completarTarea(item)" class="botones completarTarea">Completar</button>
+                            }
+                            <button (click)="eliminarTarea(item)" class="botones eliminarTarea">Eliminar</button>
+                            <button (click)="editarTarea(item)" class="botones editarTarea">Editar</button>
+                        </div>
+                    }
+                }
+            }@else() {
+                @for (item of modificaTarea; track $index) {
+                    <div class="tarea">
+                        
+                        <input [(ngModel)]="modificaTarea[$index].nombre" type="text" class="tareaModifica" (keydown.enter)="putTarea()">
+                        <button [disabled]="!modificaTarea[$index].nombre.trim()" (click)="putTarea()" class="botones nuevaTareaButton">Modificar Tarea</button>
+                        
+                        <p>{{item.completada | sino | uppercase}}</p>
+                        
+
+                    </div>
+                    
+                }
+            }
+
+            
+        </div>
+    </div>
+</div>

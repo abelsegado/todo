@@ -1,0 +1,15 @@
+<div class="acceso">
+    <div class="login">
+        <h1>Login</h1>
+        <p>Usuario</p>
+        <input (input)="mensajeError=''" [(ngModel)]="nombreUsusario" type="text" id="usuarioInputLogin">
+        <p>Contraseña</p>
+        <input (keydown.enter)="login()" (input)="mensajeError=''"  [(ngModel)]="claveUsuario" type="password" id="claveInputLogin">
+        <p>Usuario: {{nombreUsusario}} Clave: {{claveUsuario}}</p>
+        @if (mensajeError!='') {
+            <p class="error">{{mensajeError}}</p>
+        }
+        <button (click)="login()" [disabled]="!nombreUsusario.trim() || !claveUsuario.trim()" class="botones loginButton">Entrar</button>
+        <button (click)="cargarLogup()" class="botones pageRegisterButton">Crear cuenta</button>
+    </div>
+</div>

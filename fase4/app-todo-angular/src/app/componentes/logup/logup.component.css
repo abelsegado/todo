@@ -1,0 +1,17 @@
+.registro {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  padding: 50px;
+  flex-direction: column;
+  width: 50%;
+  height: 30%;
+  background-color: antiquewhite;
+}
+
+.error{
+  color: red;
+  font-size: 14px;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}

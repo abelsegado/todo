@@ -11,7 +11,7 @@
     //comprobamos si recibimos usuario y clave
 
     if (!isset($data['usuario']) || !isset($data['clave'])) {
-        $respuesta['error'] = "Faltan datos";
+        $respuesta['error'] = "Faltan datoss";
         echo json_encode($respuesta);
         exit;
         

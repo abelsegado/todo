@@ -9,9 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
     ? JSON.parse(localStorage.getItem("tasksData"))
     : [];
   // Array de usuario logueado (almacenados en el locahost)
-  let usuarioSesion = localStorage.getItem("usuarioLogueado");
-  
-console.log(usuarioSesion);
+  // let usuarioSesion = localStorage.getItem("usuarioLogueado");
 
   // Elementos del DOM
   const loginButton = document.querySelector(".loginButton");
@@ -41,15 +39,15 @@ console.log(usuarioSesion);
     document.querySelector(".login").classList.add("oculto");
   }
   let sesion
-// Comprobar sesion iniciada
-    if (usuarioSesion) {
-      sesion=true
-      let userSesion = JSON.parse(usuarioSesion);
-      //inicia la sesion automaticamente del usuario logueado si refresca la pagina
-      iniciarSesion(userSesion[0].usuario, userSesion[0].clave);
-    }else{
-      sesion=false
-    }
+// // Comprobar sesion iniciada
+//     if (usuarioSesion) {
+//       sesion=true
+//       let userSesion = JSON.parse(usuarioSesion);
+//       //inicia la sesion automaticamente del usuario logueado si refresca la pagina
+//       iniciarSesion(userSesion[0].usuario, userSesion[0].clave);
+//     }else{
+//       sesion=false
+//     }
 
 
   // Función para cerrar sesión
@@ -68,57 +66,74 @@ console.log(usuarioSesion);
 
   // Función para iniciar sesión
   function iniciarSesion(usuario, clave) {
-    
-    const user = usersData.find(
-      (u) => u.usuario === usuario && u.clave === clave
-    );
 
-    if (user) {
-      // Muestra el área principal
-      document.querySelector(".main").classList.remove("oculto");
-      document.querySelector(".acceso").classList.add("oculto");
+     fetch("api/login.POST.php", {
+       method: "POST",
+       headers: { "Content-Type": "application/json" },
+       body: JSON.stringify({
+         usuario: usuario,
+         clave: clave,
+       }),
+     })
+     .then((response) => {
+        return response.json();
+      })
+      .then((json) => {
+        if (json.success) {
+          // Muestra el área principal
+          document.querySelector(".main").classList.remove("oculto");
+          document.querySelector(".acceso").classList.add("oculto");
 
-      //crea el usuarioLogueado si no lo estaba
-      if (!sesion) {
-        console.log(1);
-        localStorage.setItem("usuarioLogueado", JSON.stringify([user]));
-      }
+          //crea el usuarioLogueado si no lo estaba
+          if (!sesion) {
+            console.log(1);
+            localStorage.setItem("usuarioLogueado", JSON.stringify([json.data]));
+          }
 
-      // Muestra el nombre del usuario
-      nombreUsuarioElement.textContent = usuario;
-      let usuarioActual = nombreUsuarioElement.textContent;
-      // Actualiza el contador de tareas completadas y pendientes
-      actualizarContadoresTareas();
+          // Muestra el nombre del usuario
+          nombreUsuarioElement.textContent = usuario;
+          let usuarioActual = nombreUsuarioElement.textContent;
+          // Actualiza el contador de tareas completadas y pendientes
+          actualizarContadoresTareas();
 
-      // Filtra las tareas del usuario actual y las almacena en una variable
-      let tareasDelUsuarioPendientes = tasksData.filter(
-        (tarea) => tarea.propietario === usuarioActual && !tarea.completado
-      );
-      // pinta las tareas del usuario actual pendientes
-      pintarTareas(tareasDelUsuarioPendientes);
-    } else {
-      alert("Usuario o contraseña incorrectos");
-    }
+          // Filtra las tareas del usuario actual y las almacena en una variable
+          let tareasDelUsuarioPendientes = tasksData.filter(
+            (tarea) => tarea.propietario === usuarioActual && !tarea.completado
+          );
+          // pinta las tareas del usuario actual pendientes
+          pintarTareas(tareasDelUsuarioPendientes);
+        } else {
+          alert("Usuario o contraseña incorrecta.");
+        }
+      });
   }
 
   // Función para registrar un nuevo usuario
   function registrarUsuario(nombre, usuario, clave, confirmarClave) {
-    // Verifica que las contraseñas coincidan
-    if (clave === confirmarClave) {
-      // Verifica que el usuario no exista
-      if (!usersData.some((u) => u.usuario === usuario)) {
-        // Agrega el nuevo usuario al array
-        usersData.push({ nombre, usuario, clave });
-        // Almacena los datos en el localStorage
-        localStorage.setItem("usersData", JSON.stringify(usersData));
-        // Muestra el formulario de acceso
+
+    //haz un fecth a la api para registrar un nuevo usuario
+    fetch("api/register.POST.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        nombre: nombre,
+        usuario: usuario,
+        contraseña: clave,
+      }),
+    })
+    .then((response) => {
+      return response.json();
+    })
+    .then((json) => {
+      console.log(json);
+      if (json.success) {
+        alert("Usuario registrado con exito");
         showLoginForm();
       } else {
-        alert("El usuario ya existe");
+        alert(json.error);
       }
-    } else {
-      alert("Las contraseñas no coinciden");
-    }
+    })
+
   }
 
   // Función para agregar una nueva tarea
@@ -142,6 +157,9 @@ console.log(usuarioSesion);
 
   // funcion pintar tareas
   function pintarTareas(tareas) {
+    //fetch para listar tareas del usuario
+
+
     const usuarioActual = nombreUsuarioElement.textContent;
     listaTareasElement.innerHTML = "";
     let tareaUsuario = tareas.filter((t) => t.propietario === usuarioActual);
@@ -174,26 +192,39 @@ console.log(usuarioSesion);
 
 
   function mostrarTareasCompletadasOPendientes() {
-    const usuarioActual = nombreUsuarioElement.textContent;
+    let usuarioSesion = localStorage.getItem("usuarioLogueado");
+    let userSesion = JSON.parse(usuarioSesion);
+    console.log(userSesion);
+    //fetch para listar las tareas de un usuario con GET
+    fetch("api/tareas.GET.php?id_usuario=" + userSesion[0].id_usuario, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((json) => {
+        console.log(json);
+        
+        // Resto del código para mostrar las tareas
+        // Lógica para mostrar/ocultar tareas completadas según el estado del checkbox
+        if (mostrarTareasCompletadasCheckbox.checked) {
+          // Muestra las tareas completadas
+          pintarTareas(json);
+        } else {
+          // Oculta las tareas completadas
+          pintarTareas(json);
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+    
+    
 
 
 
-  let tareasCompletadasUsuarioActual = tasksData.filter(
-    (t) => t.propietario === usuarioActual && t.completado
-    );
-    let tareasPendientesUsuarioActual = tasksData.filter(
-      (t) => t.propietario === usuarioActual && !t.completado
-    );
 
-
-    // Lógica para mostrar/ocultar tareas completadas según el estado del checkbox
-    if (mostrarTareasCompletadasCheckbox.checked) {
-      // Muestra las tareas completadas
-      pintarTareas(tareasCompletadasUsuarioActual);
-    } else {
-      // Oculta las tareas completadas
-      pintarTareas(tareasPendientesUsuarioActual);
-    }
   }
 
 function okOrRemoveTarea(event) {
@@ -234,9 +265,7 @@ function okOrRemoveTarea(event) {
     const nombreInput = document.getElementById("nombreInput").value;
     const usuarioInput = document.getElementById("usuarioInput").value;
     const claveInput = document.getElementById("claveInput").value;
-    const confirmarClaveInput = document.getElementById(
-      "confirmarClaveInput"
-    ).value;
+    const confirmarClaveInput = document.getElementById("confirmarClaveInput").value;
     registrarUsuario(
       nombreInput,
       usuarioInput,
